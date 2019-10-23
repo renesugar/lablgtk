@@ -8,9 +8,8 @@
 
 (* $Id$ *)
 
-open GMain
-
 let main () =
+  GMain.init ();
 
   let window = GWindow.window ~title: "Link button" ~border_width: 0 () in
 
@@ -22,10 +21,10 @@ let main () =
   in
   button#set_uri "GHHHHH";
   Format.printf "Got:%a@." GUtil.print_widget button;
-  GtkButton.LinkButton.set_uri_hook 
-    (fun _ s -> Format.printf "Got url '%s'@." s;   button#set_uri "AGAIN");
+  button#connect#activate_link
+    (fun () -> Format.printf "Got url '%s'@." button#uri;   button#set_uri "AGAIN");
   window#connect#destroy GMain.quit;
   window#show ();
-  Main.main ()
+  GMain.main ()
 
 let _ = main ()

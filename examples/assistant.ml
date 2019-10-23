@@ -7,15 +7,12 @@
 (**************************************************************************)
 
 (* $Id: $ *)
-open GMain
-
 let main () =
   GMain.init ();
 
   let assistant = GAssistant.assistant () in
 
-  let box = GPack.vbox () 
-  in
+  let box = GPack.vbox () in
   ignore (assistant#append_page box#as_widget);
   assistant#set_page_complete box#as_widget true;
   prerr_endline "Complete";
@@ -26,11 +23,11 @@ let main () =
   in
   button#set_uri "GHHHHH";
   Format.printf "Got:%a@." GUtil.print_widget button;
-  GtkButton.LinkButton.set_uri_hook 
-    (fun _ s -> Format.printf "Got url '%s'@." s;   button#set_uri "AGAIN");
+  button#connect#activate_link
+    (fun () -> Format.printf "Got url '%s'@." button#uri;   button#set_uri "AGAIN");
   assistant#connect#close GMain.quit;
   assistant#show ();
-  Main.main ()
+  GMain.main ()
 
 let _ = main ()
 
